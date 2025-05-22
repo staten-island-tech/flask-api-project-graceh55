@@ -75,22 +75,22 @@ body {
   }
   
   /* Pokémon detail page styling */
-  .pokemon-detail {
+  .nutrition-detail {
     text-align: center;
   }
   
-  .pokemon-detail img {
+  .nutrition-detail img {
     width: 200px;
     height: auto;
     margin-bottom: 20px;
   }
   
-  .pokemon-detail p {
+  .nutrition-detail p {
     font-size: 1.1em;
   }
   
   /* Chart container styling */
-  .pokemon-stats {
+  .nutrition-stats {
     width: 100%;
     max-width: 600px;
     margin: 40px auto;
