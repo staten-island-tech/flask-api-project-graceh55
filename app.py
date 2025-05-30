@@ -30,6 +30,7 @@ def analyze_nutrition(ingredients_text):
 
     response = requests.post(url, headers=headers, params=params, json=payload)
 
+
     if response.status_code == 200:
         data = response.json()
         return render_template("nutrition.html", data=data)
