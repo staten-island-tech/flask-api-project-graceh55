@@ -1,4 +1,49 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import requests
+
+app = Flask(__name__)
+
+# Replace with your actual Edamam credentials
+EDAMAM_APP_ID = "your_app_id"
+EDAMAM_APP_KEY = "your_app_key"
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        ingredients = request.form.get("ingredients")
+        if ingredients:
+            return analyze_nutrition(ingredients)
+    return render_template("index.html")
+
+def analyze_nutrition(ingredients_text):
+    url = "https://api.edamam.com/api/nutrition-details"
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "title": "User Recipe",
+        "ingr": ingredients_text.strip().split("\n")
+    }
+
+    params = {
+        "app_id": EDAMAM_APP_ID,
+        "app_key": EDAMAM_APP_KEY
+    }
+
+    response = requests.post(url, headers=headers, params=params, json=payload)
+
+    if response.status_code == 200:
+        data = response.json()
+        return render_template("nutrition.html", data=data)
+    else:
+        error_message = response.json().get("error", "Unknown error")
+        return render_template("error.html", message=error_message)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+
+
+""" from flask import Flask, render_template
 import requests
 
 app = Flask(__name__)
@@ -61,4 +106,4 @@ def    nutrition_detail(id):
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True) """

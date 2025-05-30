@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nutrition Analyzer</title>
+    <!-- Link to your CSS stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Nutrition Analysis Tool</h1>
+      <p>Enter ingredients below (one per line):</p>
+      <form method="post" action="/">
+        <textarea name="ingredients" placeholder="e.g.
+1 cup rice
+2 eggs
+1 tbsp olive oil" required></textarea>
+        <input type="submit" value="Analyze" />
+      </form>
+    </div>
+  </body>
+</html>
+
