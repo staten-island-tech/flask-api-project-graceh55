@@ -1,89 +1,96 @@
-/* Reset some base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: Arial, sans-serif;
-  padding: 2rem;
-  background-color: #f9f9f9;
-  color: #333;
-  line-height: 1.6;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
 }
 
-/* Headings */
+/* Container styling */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* Title styling */
 h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
-h2 {
-  font-size: 1.5rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+/* Card container styling */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
-/* Form styles */
-form {
-  margin-top: 1rem;
-}
-
-textarea {
-  width: 100%;
-  height: 200px;
-  font-size: 1rem;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-input[type="submit"] {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  margin-top: 1rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-input[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-/* Nutrition facts section */
-.summary p {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-}
-
-ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-li {
-  background: #f4f4f4;
-  margin-bottom: 8px;
-  padding: 10px;
-  border-left: 5px solid #4CAF50;
-  border-radius: 4px;
-}
-
-/* Link back */
-a {
-  display: inline-block;
-  margin-top: 2rem;
-  color: #4CAF50;
+/* Remove link default styles */
+.card-link {
   text-decoration: none;
-  font-weight: bold;
+  color: inherit;
 }
 
-a:hover {
-  text-decoration: underline;
+/* Individual card styling */
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+/* Hover effect for cards */
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* Card image styling */
+.card img {
+  width: 100%;
+  height: auto;
+}
+
+/* Card body styling */
+.card-body {
+  padding: 15px;
+}
+
+/* Card title styling */
+.card-title {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+/* Card text styling */
+.card-text {
+  color: #555;
+  margin-top: 5px;
+}
+
+/* Pokémon detail page styling */
+.pokemon-detail {
+  text-align: center;
+}
+
+.pokemon-detail img {
+  width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.pokemon-detail p {
+  font-size: 1.1em;
+}
+
+/* Chart container styling */
+.pokemon-stats {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto;
 }
