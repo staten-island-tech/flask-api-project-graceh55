@@ -1,42 +1,64 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 import requests
+import json
 import os
+import re
 
 app = Flask(__name__)
 
-# Replace with your actual Edamam API credentials
-EDAMAM_APP_ID = os.environ.get("EDAMAM_APP_ID", "your_app_id")
-EDAMAM_API_KEY = os.environ.get("EDAMAM_API_KEY", "your_api_key")
+# Replace with your real Edamam credentials
+EDAMAM_APP_ID = "your_real_app_id"
+EDAMAM_API_KEY = "your_real_app_key"
+
+def clean_filename(title):
+    # Create a safe filename: lowercase, underscores, no special characters
+    filename = re.sub(r'[^a-zA-Z0-9_]', '', title.replace(' ', '_').lower())
+    return filename + ".json"
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return "Edamam Nutrition API is running. Use POST /analyze_recipe"
 
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    ingredients = request.json.get('ingredients')
-    if not ingredients:
-        return jsonify({"error": "No ingredients provided"}), 400
+@app.route('/analyze_recipe', methods=['POST'])
+def analyze_recipe():
+    data = request.get_json()
 
-    url = "https://api.edamam.com/api/nutrition-data"
+    if not data or 'title' not in data or 'ingr' not in data:
+        return jsonify({"error": "Missing 'title' or 'ingr' in request"}), 400
+
+    url = "https://api.edamam.com/api/nutrition-details"
     params = {
         "app_id": EDAMAM_APP_ID,
-        "app_key": EDAMAM_API_KEY,
-        "ingr": ingredients
+        "app_key": EDAMAM_API_KEY
     }
 
-    response = requests.get(url, params=params)
-    if response.status_code != 200:
-        return jsonify({"error": "API request failed"}), 500
+    try:
+        response = requests.post(url, params=params, json=data)
+        response.raise_for_status()
+        result = response.json()
 
-    return jsonify(response.json())
+        # Generate safe filename from recipe title
+        filename = clean_filename(data['title'])
+        output_path = os.path.join(os.getcwd(), filename)
+
+        with open(output_path, "w") as f:
+            json.dump(result, f, indent=4)
+
+        return jsonify({
+            "message": f"Nutrition data saved to {filename}",
+            "summary": {
+                "calories": result.get("calories"),
+                "totalWeight": result.get("totalWeight"),
+                "dietLabels": result.get("dietLabels", []),
+                "healthLabels": result.get("healthLabels", [])
+            }
+        })
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "API request failed", "details": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-@app.route('/nutrition')
-def nutrition():
-    return render_template('nutrition.html')
 
 
 
