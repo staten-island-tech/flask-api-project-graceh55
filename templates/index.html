@@ -1,32 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disney Characters</title>
+    <title>All Disney Characters</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .character { margin: 20px; display: inline-block; text-align: center; }
-        .character img { width: 150px; height: 150px; object-fit: cover; }
-        .character a { text-decoration: none; color: black; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 8px 14px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .character-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+
+        .character-card {
+            width: 140px;
+            text-align: center;
+        }
+
+        .character-card img {
+            width: 120px;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .character-card img:hover {
+            transform: scale(1.05);
+        }
+
+        .character-card a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            display: block;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
-    <h1>Disney Characters</h1>
-    <div class="characters">
-        {% for character in characters %}
-        <div class="character">
-            <a href="{{ url_for('character', character_id=character['_id']) }}">
-                <img src="{{ character['imageUrl'] }}" alt="{{ character['name'] }}">
-                <p>{{ character['name'] }}</p>
-            </a>
-        </div>
+    <h1>All Disney Characters</h1>
+
+    <form method="get" action="{{ url_for('search') }}">
+        <input type="text" name="q" placeholder="Search characters by name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="character-grid">
+        {% for character in disney %}
+            <div class="character-card">
+                <a href="{{ url_for('character_by_id', id=character._id) }}">
+                    <img src="{{ character.imageUrl }}" alt="{{ character.name }}">
+                    {{ character.name }}
+                </a>
+            </div>
+        {% else %}
+            <p>No characters found.</p>
         {% endfor %}
     </div>
-    {% if next_page %}
-    <a href="{{ url_for('index', page=next_page) }}">Next Page</a>
-    {% endif %}
 </body>
 </html>
+
 
 

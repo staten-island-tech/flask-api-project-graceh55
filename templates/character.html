@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <title>
+        {% if disney and disney.name %}
+            {{ disney.name }}
+        {% else %}
+            Character Not Found
+        {% endif %}
+    </title>
+</head>
+<body>
+    {% if not disney or not disney.name %}
+        <h1>{{ error or "Character Not Found" }}</h1>
+        <p><a href="{{ url_for('index') }}">Back to home</a></p>
+    {% else %}
+        <h1>{{ disney.name }}</h1>
+
+        {% if disney.imageUrl %}
+            <img src="{{ disney.imageUrl }}" alt="{{ disney.name }}" style="max-width: 200px;">
+        {% endif %}
+
+        <p><strong>ID:</strong> {{ disney._id }}</p>
+
+        <p><strong>TV Shows:</strong>
+            {% if disney.tvShows and disney.tvShows|length > 0 %}
+                {{ disney.tvShows | join(', ') }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+        <p><strong>Films:</strong>
+            {% if disney.films and disney.films|length > 0 %}
+                {{ disney.films | join(', ') }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+        <p><strong>Video Games:</strong>
+            {% if disney.videoGames and disney.videoGames|length > 0 %}
+                {{ disney.videoGames | join(', ') }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+        <p><a href="{{ url_for('index') }}">Back to home</a></p>
+    {% endif %}
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <title>Search results for "{{ query }}"</title>
+</head>
+<body>
+  <h1>Search results for "{{ query }}"</h1>
+
+  <ul>
+    {% for character in characters %}
+      <li>
+        <a href="{{ url_for('character_by_id', id=character['_id']) }}">
+          {{ character['name'] or 'Unnamed Character' }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p><a href="{{ url_for('index') }}">Back to home</a></p>
+</body>
+</html>
