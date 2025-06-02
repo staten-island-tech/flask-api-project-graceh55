@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ character['name'] }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .character-details { display: flex; align-items: center; }
+        .character-details img { width: 300px; height: 300px; object-fit: cover; margin-right: 20px; }
+        .character-details div { max-width: 600px; }
+    </style>
+</head>
+<body>
+    <h1>{{ character['name'] }}</h1>
+    <div class="character-details">
+        <img src="{{ character['imageUrl'] }}" alt="{{ character['name'] }}">
+        <div>
+            <p><strong>Films:</strong> {{ character['films'] | join(', ') }}</p>
+            <p><strong>TV Shows:</strong> {{ character['tvShows'] | join(', ') }}</p>
+            <p><strong>Video Games:</strong> {{ character['videoGames'] | join(', ') }}</p>
+            <p><strong>Park Attractions:</strong> {{ character['parkAttractions'] | join(', ') }}</p>
+            <p><strong>Allies:</strong> {{ character['allies'] | join(', ') }}</p>
+            <p><strong>Enemies:</strong> {{ character['enemies'] | join(', ') }}</p>
+            <p><a href="{{ character['sourceUrl'] }}" target="_blank">More Info</a></p>
+        </div>
+    </div>
+    <a href="{{ url_for('index') }}">Back to List</a>
+</body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ nutrition.name }} Details</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{ nutrition.name }} Details</h1>
+      <div class="nutrition-detail">
+        <img src="{{ nutrition.image }}" alt="{{ nutrition.name }}" />
+        <p><strong>ID:</strong> {{ nutrition.id }}</p>
+        <p><strong>Types:</strong> {{ nutrition.types | join(', ') }}</p>
+        <p><strong>Calories:</strong> {{ nutrition.calories }}</p>
+        <p><strong>total_nutrients:</strong> {{ nutrition.total_nutrients }}</p>
+      </div> -->
+      <!-- Chart container -->
+      <!-- <div class="nutrition-stats">
+        <canvas id="statsChart"></canvas>
+      </div>
+      <p><a href="{{ url_for('index') }}">Back to all food</a></p>
+    </div>
+ -->
+    <!-- Include Chart.js from a CDN -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // Convert Python lists to JavaScript arrays using Jinja's tojson filter
+      const statNames = {{ nutrition.stat_names | tojson }};
+      const statValues = {{ nutrition.stat_values | tojson }};
+ -->
+     <!--  // Create a bar chart to display the food's base stats
+      const ctx = document.getElementById('statsChart').getContext('2d');
+      const statsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: statNames,
+          datasets: [{
+            label: 'Base Stats',
+            data: statValues,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html> -->
