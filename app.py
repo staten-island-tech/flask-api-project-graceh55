@@ -1,46 +1,42 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import requests
+import os
 
 app = Flask(__name__)
 
-# Replace with your actual Edamam credentials
-EDAMAM_APP_ID = "your_app_id"
-EDAMAM_APP_KEY = "your_app_key"
+# Replace with your actual Edamam API credentials
+EDAMAM_APP_ID = os.environ.get("EDAMAM_APP_ID", "your_app_id")
+EDAMAM_API_KEY = os.environ.get("EDAMAM_API_KEY", "your_api_key")
 
-@app.route("/", methods=["GET", "POST"])
+@app.route('/')
 def index():
-    if request.method == "POST":
-        ingredients = request.form.get("ingredients")
-        if ingredients:
-            return analyze_nutrition(ingredients)
-    return render_template("index.html")
+    return render_template('index.html')
 
-def analyze_nutrition(ingredients_text):
-    url = "https://api.edamam.com/api/nutrition-details"
-    headers = {"Content-Type": "application/json"}
-    payload = {
-        "title": "User Recipe",
-        "ingr": ingredients_text.strip().split("\n")
-    }
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    ingredients = request.json.get('ingredients')
+    if not ingredients:
+        return jsonify({"error": "No ingredients provided"}), 400
 
+    url = "https://api.edamam.com/api/nutrition-data"
     params = {
         "app_id": EDAMAM_APP_ID,
-        "app_key": EDAMAM_APP_KEY
+        "app_key": EDAMAM_API_KEY,
+        "ingr": ingredients
     }
 
-    response = requests.post(url, headers=headers, params=params, json=payload)
+    response = requests.get(url, params=params)
+    if response.status_code != 200:
+        return jsonify({"error": "API request failed"}), 500
 
+    return jsonify(response.json())
 
-    if response.status_code == 200:
-        data = response.json()
-        return render_template("nutrition.html", data=data)
-    else:
-        error_message = response.json().get("error", "Unknown error")
-        return render_template("error.html", message=error_message)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
 
+@app.route('/nutrition')
+def nutrition():
+    return render_template('nutrition.html')
 
 
 

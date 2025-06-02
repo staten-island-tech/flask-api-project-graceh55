@@ -1,61 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Nutrition Results</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 2rem;
-            background-color: #fff;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        .summary {
-            margin-bottom: 1rem;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        li {
-            background: #f4f4f4;
-            margin: 5px 0;
-            padding: 10px;
-            border-left: 4px solid #4CAF50;
-        }
-        a {
-            display: inline-block;
-            margin-top: 2rem;
-            color: #4CAF50;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Nutrition Breakdown</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .stat-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .stat-box:hover {
+      background-color: #f1f1f1;
+    }
+  </style>
 </head>
-<body>
-    <h1>Nutrition Facts</h1>
+<body class="container py-4">
 
-    <div class="summary">
-        <p><strong>Calories:</strong> {{ data.calories }}</p>
-        <p><strong>Total Weight:</strong> {{ data.totalWeight | round(2) }} g</p>
+  <h2 class="mb-4">Nutrition Breakdown Viewer</h2>
+
+  <form id="nutritionForm" class="mb-3">
+    <div class="mb-3">
+      <label for="ingredients" class="form-label">Ingredients List</label>
+      <input type="text" class="form-control" id="ingredients" placeholder="e.g. 1 cup rice, 1 chicken breast" required>
     </div>
+    <button type="submit" class="btn btn-success">Get Nutrition</button>
+  </form>
 
-    <h2>Macronutrients</h2>
-    <ul>
-        {% for key, nutrient in data.totalNutrients.items() %}
-            <li>
-                <strong>{{ nutrient.label }}</strong>: {{ nutrient.quantity | round(2) }} {{ nutrient.unit }}
-            </li>
-        {% endfor %}
-    </ul>
+  <div id="stats" class="row"></div>
 
-    <a href="/">Analyze Another Recipe</a>
+  <script>
+    document.getElementById('nutritionForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const input = document.getElementById('ingredients').value;
+      const response = await fetch('/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ingredients: input })
+      });
+
+      const data = await response.json();
+      const statsContainer = document.getElementById('stats');
+      statsContainer.innerHTML = '';
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      const stats = [
+        { label: 'Calories', value: data.calories },
+        { label: 'Total Weight', value: `${data.totalWeight.toFixed(1)} g` },
+        { label: 'Fat', value: `${data.totalNutrients.FAT?.quantity.toFixed(1)} ${data.totalNutrients.FAT?.unit}` },
+        { label: 'Carbohydrates', value: `${data.totalNutrients.CHOCDF?.quantity.toFixed(1)} ${data.totalNutrients.CHOCDF?.unit}` },
+        { label: 'Protein', value: `${data.totalNutrients.PROCNT?.quantity.toFixed(1)} ${data.totalNutrients.PROCNT?.unit}` }
+      ];
+
+      stats.forEach(stat => {
+        const box = document.createElement('div');
+        box.className = 'col-md-3 stat-box';
+        box.innerHTML = `<h5>${stat.label}</h5><p>${stat.value}</p>`;
+        box.onclick = () => alert(`${stat.label}: ${stat.value}`);
+        statsContainer.appendChild(box);
+      });
+    });
+  </script>
+
 </body>
 </html>
+
 
 
 
